@@ -39,14 +39,23 @@ class MorseTranslate:
         result = ''
         words = text.split()
         for word in words:
-            for _i, char in enumerate(word):
+            offset = 0
+            for i in range(len(word)):
+                i += offset
+                if i >= len(word):
+                    break
+                char = word[i]
+                if i - 1 < len(word):
+                    if word[i:i + 2].lower() == 'ch':
+                        char = 'ch'
+                        offset += 1
                 result += ''.join(
                     [
                         x[0] for x in MorseTranslate.morse_table.items()
                         if x[1] == char.lower()
                     ],
                 )
-                if _i < len(word) - 1:
+                if i < len(word) - 1:
                     result += char_delim
             result += word_delim
         return result.strip(word_delim)
@@ -72,6 +81,8 @@ class MorseTranslate:
 
 
 def main() -> int:
+    print(MorseTranslate.str_to_morse('funguje to'))
+    print(MorseTranslate.morse_to_str('..-.|..-|-.|--.|..-|.---|.||-|---'))
     return 0
 
 
